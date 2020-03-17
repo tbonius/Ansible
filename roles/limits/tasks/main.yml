@@ -1,0 +1,8 @@
+---
+- name: Set JBoss limits
+  include: setjbosslimits.yml
+  when: '"jap" in ansible_hostname'
+
+- name: Set Apache limits
+  include: setapachelimits.yml
+  when: '"web" in ansible_hostname'

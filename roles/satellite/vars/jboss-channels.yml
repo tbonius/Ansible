@@ -1,0 +1,5 @@
+---
+channels:
+  - "{{ 'jbappplatform-7.0-x86_64-server-7-rpm-' + channel_date if '7' in ansible_distribution_major_version else 'jbappplatform-6-x86_64-server-6-rpm-' + channel_date }}"
+
+

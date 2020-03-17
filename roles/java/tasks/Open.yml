@@ -1,0 +1,12 @@
+---
+- name: Install Open Java
+  register: __java_open_install
+  yum:
+    name: "{{ __java_open_package }}"
+    state: installed
+  
+- name: Wait For Install to Complete And Directory to Exist
+  pause:
+    seconds: 10
+  when: __java_open_install is changed
+  

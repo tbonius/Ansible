@@ -1,0 +1,48 @@
+---
+# Install task for sat6_server
+#
+- name: Add firewall rules to allow setup of Satellite 6
+  firewalld:
+    service: RH-Satellite-6
+    permanent: yes
+    state: enabled 
+  
+- name: Register as Linux Team user and auto attach to required pool.
+  redhat_subscription:
+    state: present
+    username: "{{ rhn_username }}"
+    password: "{{ rhn_password }}"
+    pool_ids: "{{ rhn_pool_id }}"
+
+- name: Enable required RHN repositories for Satellite 6
+  rhsm_repository:
+    name: "{{ rhn_repos }}"
+  vars:
+    packages:
+    - rhel-7-server-rpms
+    - rhel-server-rhscl-7-rpms
+    - rhel-7-server-satellite-6.4-rpms
+    - rhel-7-server-satellite-maintenance-6-rpms
+    - rhel-7-server-ansible-2.6-rpms
+
+- name: Clear out repository data before installing Satellite 6
+  shell: yum clean allow
+
+- name: Perform yum upgrade before installing Satellite 6
+  shell: yum update -y
+
+- name: Install the specific version of Satellite
+  yum:
+    name: {{ sat6_server_pkg }}
+    state: present
+
+- name: Copy the Satellite 6 Answer file for automated installation
+  template:
+    src: satellite-answers.yaml.j2
+    dest: /etc/foreman-installer/scenarios.d/satellite-answers.yaml
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Perform setup and configuration of Satellite 6 server
+  shell: satellite-installer --scenario satellite

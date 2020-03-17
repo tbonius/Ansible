@@ -1,0 +1,13 @@
+- hosts: "{{target}}"
+  tasks:
+    - debug:
+        msg: "Deprovision playbook"
+        
+- import_playbook: satellite.yml
+  vars:
+    satellite_register: 'no'
+    
+- import_playbook: sssd.yml
+  vars:
+    ldap_join: 'no'
+

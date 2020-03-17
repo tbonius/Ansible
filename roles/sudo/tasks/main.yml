@@ -1,0 +1,15 @@
+---
+# tasks file for sudo
+# Install and configure SSSD
+  
+- name: install sudo
+  package:
+    name: sudo
+    state: present
+
+- template:
+    src: Admins.j2
+    dest: /etc/sudoers.d/Admins
+    owner: root 
+    group: root
+    mode: 0644

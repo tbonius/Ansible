@@ -1,0 +1,27 @@
+- name: Set jboss limits
+  blockinfile:
+     path: /etc/security/limits.conf
+     insertafter: EOF
+     state: present
+     marker: "## {mark} added by ansible"
+     block: |
+       svc_jb_np        hard    nproc           10000
+       svc_jb_np        soft    nproc           10000
+       svc_jb_np        hard    nofile          10000
+       svc_jb_np        soft    nofile          10000
+       svc_jb_prod      hard    nproc           10000
+       svc_jb_prod      soft    nproc           10000
+       svc_jb_prod      hard    nofile          10000
+       svc_jb_prod      soft    nofile          10000
+
+- name: Set jboss sysctl limits
+  blockinfile:
+     path: /etc/sysctl.conf
+     insertafter: EOF
+     state: present
+     marker: "## {mark} added by ansible"
+     block: |
+       # Allow a 25MB UDP receive buffer for JGroups
+       net.core.rmem_max = 26214400
+       # Allow a 1MB UDP send buffer for JGroups
+       net.core.wmem_max = 1048576

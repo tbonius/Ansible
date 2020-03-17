@@ -1,0 +1,13 @@
+---
+# Configure the system DNS to use the AD DC
+# CentOS / RHEL Specific Setup
+
+- name: Set resolv config - /etc/resolv.conf
+  template: src=resolv.conf.j2 dest=/etc/resolv.conf owner=root group=root mode=0644
+  
+- name: Set hosts file - /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^{{ ansible_default_ipv4.address }}'
+    line: '{{ ansible_default_ipv4.address }}   {{ ansible_hostname }}.{{ ldap_domain }} {{ ansible_hostname }}'
+    state: present

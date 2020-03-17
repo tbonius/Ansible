@@ -1,0 +1,9 @@
+---
+- include_tasks: install.yml
+  when: "sat6_server_state == 'install'"  
+
+- include_tasks: uninstall.yml
+  when: "sat6_server_state == 'uninstall'"
+  
+- include_tasks: upgrade.yml
+  when: "sat6_server_state == 'upgrade'"

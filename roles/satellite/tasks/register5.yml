@@ -1,0 +1,75 @@
+---
+- name: Check for RHEL6 activiation key
+  set_fact:
+    key: "2-rhel6"
+    when: ansible_distribution_major_version == '6'
+
+- name: Check for RHEL7 activiation key
+  set_fact:
+    key: "2-rhel7"
+    when: ansible_distribution_major_version == '7'
+
+- name: Import EPEL GPG
+  command: "rpm --import http://{{satellite_server}}/pub/RPM-GPG-KEY-EPEL-{{ansible_distribution_major_version}}"
+
+- name: Download certificate
+  get_url:
+    url: "http://{{satellite_server}}/pub/RHN-ORG-TRUSTED-SSL-CERT"
+    dest: /usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Update cert name
+  replace:
+    path: /etc/sysconfig/rhn/up2date
+    regexp: 'sslCACert=/usr/share/rhn/RHNS-CA-CERT'
+    replace: 'sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT'
+
+- name: Register to satellite 5
+  rhn_register:
+    state: present
+    activationkey: "{{key}}"
+    server_url: "http://{{satellite_server}}/XMLRPC"
+
+- name: Install packages
+  yum: pkg={{item}} state=installed
+  with_items:
+    - libselinux-python
+    - rhn-client-tools
+    - rhn-check
+    - rhn-setup
+    - rhnsd
+    - m2crypto
+    - yum-rhn-plugin
+    - rhncfg-actions
+    - osad
+    - spacecmd
+
+- name: Create RHN run file
+  file:
+    path: /etc/sysconfig/rhn/allowed-actions/script/run
+    state: touch
+    owner: root
+    group: root
+    mode: 0644  
+
+- name: Start and enable osad
+  service: name=osad state=started enabled=yes
+
+- name: Configure spacecmd
+  template: 
+    src: ../templates/spacecmd_conf.j2
+    dest: /etc/spacecmd.conf
+    owner: root
+    group: root
+    mode: 0644
+
+#- include_vars: "vars/{{app_type}}-channels.yml"
+
+- include: base_channel.yml
+  when: base_channel|default("") != "" 
+
+- include: add_channels.yml
+  when: channels|default([])|length > 0
+

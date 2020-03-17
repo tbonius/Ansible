@@ -1,0 +1,17 @@
+---
+# Install and configure SSSD
+
+- name: Install sssd
+  package: name={{ item }} state=latest 
+  with_items:
+    - sssd
+  
+- name: Setting SSSD Config - /etc/sssd/sssd.conf
+  template: src=sssd.conf.j2 dest=/etc/sssd/sssd.conf owner=root mode=0600
+
+- name: Clear SSSD cache
+  shell: rm -rf /var/lib/sss/db/*
+  
+- name: Start SSSD and set to start on boot
+  service: name=sssd state=restarted enabled=true
+

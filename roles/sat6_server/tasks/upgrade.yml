@@ -1,0 +1,5 @@
+---
+ 
+- name: Perform upgrade of the Satellite 6 service
+  shell: "echo 'Work in progress'"
+ 

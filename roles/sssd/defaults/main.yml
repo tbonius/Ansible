@@ -1,0 +1,13 @@
+---
+# defaults file for SSD.role
+ldap_join: 'yes'
+ldap_server_ip: 10.0.0.1
+dns1: 10.0.0.1
+dns2: 10.0.0.2
+ldap_domain: domain.com
+iep_workgroup: WORKGROUP
+ldap_allowed_groups: Linux-Admins
+ntp_server1: pool1.ntp.org
+ntp_server2: pool2.ntp.org
+type: PROD 
+domain: DOMAIN

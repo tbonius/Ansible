@@ -1,0 +1,4 @@
+# This task will tell you to upgrade to RHEL7
+- name: You should upgrade to RHEL7
+  shell: "echo 'you should upgrade to RHEL7'"
+  

@@ -1,0 +1,13 @@
+---
+# Install and configure NTP
+
+- package: name={{ item }} state=latest 
+  with_items:
+    - ntp
+
+- name: Set NTP config - /etc/ntp.conf
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf owner=root mode=0644
+
+- name: Restart NTPd and Enable on Boot
+  service: name=ntpd state=restarted enabled=yes
+

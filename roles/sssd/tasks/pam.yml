@@ -1,0 +1,4 @@
+---
+- name: Run authconfig to enable SSSD auth
+  shell: authconfig --enablesssd --enablesssdauth --enablemkhomedir --update
+

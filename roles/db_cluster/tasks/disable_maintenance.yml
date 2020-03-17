@@ -1,0 +1,8 @@
+---
+# Tasks file DB_cluster to disbale maintenance mode.
+
+- name: Disable maintenance mode
+  shell: pcs property set maintenance-mode=false 
+  register: disable_maintenance_mode
+  failed_when: disable_maintenance_mode.rc != 0 
+ 

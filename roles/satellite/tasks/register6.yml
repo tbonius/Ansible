@@ -1,0 +1,32 @@
+---
+- name: Set variables
+  set_fact:
+    key: "{{activation_key}}"
+  when: activation_key|default('') != ''
+ 
+- name: Install katello cert
+  yum:
+    name: "http://{{satellite_server}}/pub/{{katello_cert}}"
+    state: present
+
+- name: Update rhsm.conf
+  replace:
+    path: /etc/rhsm/rhsm.conf
+    regexp: 'prefix = /subscription'
+    replace: 'prefix = /rhsm'
+
+- name: Register to satellite 6
+  redhat_subscription:
+    state: present
+    server_hostname: "{{satellite_server}}"
+    activationkey: "{{key}}"
+    org_id: "{{satellite6_org}}"
+    force_register: yes
+    auto_attach: true
+
+- name: Install packages
+  yum: pkg={{item}} state=installed
+  with_items:
+    - katello-agent
+    - libselinux-python
+

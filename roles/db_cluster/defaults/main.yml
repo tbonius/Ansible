@@ -1,0 +1,4 @@
+---
+# defaults file for db_cluster
+
+cluster_state: start

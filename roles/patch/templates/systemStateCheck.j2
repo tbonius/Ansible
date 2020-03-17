@@ -1,0 +1,82 @@
+#!/bin/bash
+#########################
+# System State Check    #
+#########################
+# Author: Robert Daniels#
+#########################
+
+#rhelver=$(rpm -qa | grep redhat-release-server | sed -e "s/redhat-release-server-//" | sed -e "s/[1-9]Server-//" | sed -e "s/.el[1-9].x86_64//" | cut -c1)
+rhelver=$(cut -f7 -d" " /etc/redhat-release | cut -f1 -d\.)
+
+echo "Commencing System State Check."
+
+echo "Checking Postfix maildrop for extraneous files"
+/usr/bin/find /var/spool/postfix/maildrop/ -name "*" -print0 | xargs -0 rm -f
+
+echo "Cleaning YUM cache"
+/bin/rm -rf /var/cache/yum/*
+/bin/rm -rf /opt/cache/yum/*
+/bin/rm -rf /var/lib/yum/repos/*
+#/usr/bin/yum clean all
+
+echo "Cleaning SYSLOG"
+/bin/rm -rf /var/lib/rsyslog/*
+/usr/sbin/logrotate -f /etc/logrotate.conf
+
+echo "Cleaning /var/log"
+/bin/rm -rf /var/log/*.gz
+/bin/rm -rf /var/log/*-20[1-9][0-9][01][0-9][0-3][0-9]
+/bin/rm -rf /tmp/*
+find /tmp -mindepth 1 \( -path "/tmp/systemd-private-*service-*" -o -path "/tmp/krb5cc*" -o -path "/tmp/\.msgbus" -o -path "/tmp/\.X11-unix" \) -o -delete
+/bin/rm -rf /var/log/audit/audit.log.*
+
+echo "Cleaning /var/crash"
+/bin/rm -rf /var/crash/*
+
+/usr/bin/chage -d `date +%F` root
+
+echo "Cleaning up RPM DB"
+rm -f /var/lib/rpm/__db.*
+rm -f /var/lib/rpm/.rpm.lock
+rpm --rebuilddb
+
+service rhnsd restart
+chkconfig rhnsd on
+service osad restart
+chkconfig osad on
+
+
+if [ $rhelver == 6 ]
+then
+	varcheck=`df -h /var | sed -n 3p | awk  '/\//{print $(NF-1)}' | sed 's/%//'`
+	optcheck=`df -h /opt | sed -n 3p | awk  '/\//{print $(NF-1)}' | sed 's/%//'`
+elif [ $rhelver == 7 ]
+then
+	varcheck=`df -h /var | sed -n 2p | awk  '/\//{print $(NF-1)}' | sed 's/%//'`
+	optcheck=`df -h /opt | sed -n 2p | awk  '/\//{print $(NF-1)}' | sed 's/%//'`
+fi
+
+if [ "$varcheck" -ge 75 ]
+then
+        echo "/var partition size check FAILED! Please clear /var partition to 75% or less."
+        echo "Printing top 10 largest file locations in /var."
+        timeout 60 du -xa /var | sort -n -r | head -n 10
+        if [[ $? -eq 124 ]]; then echo "ERROR: Search timed out."; fi
+        exit 1
+else
+        echo "/var partition size check PASSED!"
+fi
+
+if [ "$optcheck" -ge 85 ]
+then
+        echo "/opt partition size check FAILED! Please clear /opt partition to 85% or less."
+        echo "Printing top 10 largest file locations in /opt."
+        timeout 60 du -xa /opt | sort -n -r | head -n 10
+        if [[ $? -eq 124 ]]; then echo "ERROR: Search timed out."; fi
+        exit 1
+else
+        echo "/opt partition size check PASSED!"
+fi
+
+echo "System State Check PASSED!"
+exit 0

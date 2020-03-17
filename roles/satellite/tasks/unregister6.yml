@@ -1,0 +1,18 @@
+---
+- name: Set variables
+  set_fact:
+    key: "{{activation_key}}"
+  when: activation_key|default('') != ''
+
+- name: Uninstall packages
+  yum: pkg={{item}} state=absent
+  with_items:
+    - katello-agent
+ 
+- name: Unregister to satellite 6
+  redhat_subscription:
+    state: absent
+    server_hostname: "{{satellite_server}}"
+    activationkey: "{{key}}"
+    org_id: "{{satellite6_org}}"
+

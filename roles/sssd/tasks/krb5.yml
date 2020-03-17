@@ -1,0 +1,28 @@
+---
+# Setup Kerberos on the system
+
+- package: name={{ item }} state=latest 
+  with_items:
+    - realmd
+  when: ansible_distribution_major_version == '7'
+  
+- name: Find Existing Realm Name
+  shell: realm list | head -n 1
+  register: oldrealm 
+  when: ansible_distribution_major_version == '7'
+
+- name: Force leave existing realm
+  command: "realm leave {{ oldrealm.stdout|upper }} && sleep 5 && realm list"
+  when: ansible_distribution_major_version == '7' and oldrealm.stdout != ''
+  ignore_errors: yes
+  
+- name: Force leave existing realm one more time just because
+  command: "realm leave {{ oldrealm.stdout|upper }} && sleep 5 && realm list"
+  when: ansible_distribution_major_version == '7' and oldrealm.stdout != ''
+  ignore_errors: yes
+
+- name: Setting krb5 config - /etc/krb5.conf
+  template: src=krb5.conf.j2 dest=/etc/krb5.conf owner=root mode=0644
+
+#- name: Initialize kerberos ticket
+#  shell: 'echo "{{ldap_bind_pw}}" | kinit {{ldap_bind_user}}@{{ldap_domain|upper}}' 

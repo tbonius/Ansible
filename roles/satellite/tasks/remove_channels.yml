@@ -1,0 +1,11 @@
+---
+- name: Remove channels
+  rhn_channel:
+    name: "{{item}}"
+    sysname: "{{ansible_hostname}}"
+    url: "http://{{satellite_server}}/rpc/api"
+    user: "{{username}}"
+    password: "{{password}}"
+    state: absent
+  with_items: "{{channels}}"
+

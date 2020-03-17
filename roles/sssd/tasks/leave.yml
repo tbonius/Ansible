@@ -1,0 +1,35 @@
+---
+- name: Check if server is already added to DNS
+  command: nslookup {{ansible_hostname}}
+  register: forward
+  ignore_errors: yes
+  changed_when: no
+
+- name: Delete forward DNS
+  shell: (echo update delete {{ansible_fqdn}} 86400 a {{ansible_default_ipv4.address}}; echo send ) | nsupdate
+  when: forward.rc == 0
+  
+- name: Check if server is already added to DNS
+  command: nslookup {{ansible_default_ipv4.address}}
+  register: reverse
+  ignore_errors: yes
+  changed_when: no
+
+- name: Delete reverse DNS
+  shell: (echo update delete {{(ansible_default_ipv4.address.split('.'))[::-1]|join('.')}}.in-addr.arpa 86400 ptr {{ansible_fqdn}}.; echo send ) | nsupdate
+  when: reverse.rc == 0
+
+- name: Check for RHEL6 and Leave server to the Windows Domain
+  shell: 'echo "{{ ldap_bind_pw }}" | net ads leave -U {{ ldap_bind_user }}@{{ ldap_domain|upper }}'
+  when: ansible_distribution_major_version == '6'
+  no_log: False
+  ignore_errors: yes
+
+- name: Check for RHEL7 and Leave server to the Windows Domain
+  shell: 'realm leave {{ ldap_domain|upper }}'
+  when: ansible_distribution_major_version == '7'
+  no_log: False
+  ignore_errors: yes
+
+
+  

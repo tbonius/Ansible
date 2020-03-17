@@ -1,0 +1,7 @@
+---
+# defaults file for sat6_server
+
+sat6_server_state: 'install'
+sate6_server_pkg: 'satellite_6.4'
+rhn_pool_id: '8a85f9874152663c0541943739717d11'
+

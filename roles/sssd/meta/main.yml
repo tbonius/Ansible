@@ -1,0 +1,26 @@
+---
+galaxy_info:
+  author: Tbonius
+  description: Role allows you to provision Active Directory logins on Linux machines
+  license: Free
+  min_ansible_version: 2.0
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+    - utopic
+    - vivid
+  - name: Debian
+    versions:
+    - squeeze
+    - wheezy
+    - stable
+  - name: EL
+    versions:
+    - 6
+    - 7
+  galaxy_tags:
+  - system
+  - auth
+  - ad
+dependencies:

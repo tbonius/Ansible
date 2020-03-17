@@ -1,0 +1,18 @@
+---
+- name: Set apache limits
+  blockinfile:
+     path: /etc/security/limits.conf
+     insertafter: EOF
+     state: present
+     marker: "## {mark} added by ansible"
+     block: |
+       ## Apache limits set in systemd httpd.service configuriation
+       svc_apa_np        hard    nproc           10000
+       svc_apa_np        soft    nproc           10000
+       svc_apa_np        hard    nofile          10000
+       svc_apa_np        soft    nofile          10000
+       svc_apa_prod      hard    nproc           10000
+       svc_apa_prod      soft    nproc           10000
+       svc_apa_prod      hard    nofile          10000
+       svc_apa_prod      soft    nofile          10000
+       

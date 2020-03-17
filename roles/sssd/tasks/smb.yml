@@ -1,0 +1,54 @@
+---
+# Install and configure Samba
+
+- name: Check if server is already added to DNS PRE
+  command: nslookup {{ansible_hostname}}
+  register: forward
+  ignore_errors: yes
+  changed_when: no
+
+- name: Check if server is already added to DNS PRE
+  command: nslookup {{ansible_default_ipv4.address}}
+  register: reverse
+  ignore_errors: yes
+  changed_when: no
+
+- package: name={{ item }} state=latest 
+  with_items:
+    - samba
+
+- name: Set Samba config - /etc/samba/smb.conf
+  template: src=smb.conf.j2 dest=/etc/samba/smb.conf owner=root mode=0644
+  
+- name: Check for RHEL6 and Join server to the Windows Domain
+  shell: "echo '{{ ldap_bind_pw }}' | net ads join -U {{ ldap_bind_user }}@{{ ldap_domain|upper }} createcomputer=Servers/{{ type }} osName=RHEL osVer=6 --kerberos -d 2 2>&1"
+  when: ansible_distribution_major_version == '6'
+  no_log: True
+   
+- name: Check for RHEL7 and Join server to the Windows Domain
+  shell: "echo '{{ ldap_bind_pw }}' | realm join {{ ldap_domain|upper }} -U {{ ldap_bind_user }} --computer-ou='OU={{ type|upper }},OU=Servers,dc={{ domain|lower }},dc=domain,dc=com'"
+  when: ansible_distribution_major_version == '7'
+  no_log: True
+
+- name: Restart Samba and Enable on Boot
+  service: name=smb state=restarted enabled=yes
+
+- name: Check if server is already added to DNS
+  command: nslookup {{ansible_hostname}}
+  register: forward
+  ignore_errors: yes
+  changed_when: no
+
+- name: Add forward DNS
+  shell: (echo update add {{ ansible_hostname }}.{{ ldap_domain }} 900 a {{ansible_default_ipv4.address}}; echo send ) | nsupdate
+  when: forward.rc != 0
+  
+- name: Check if server is already added to DNS
+  command: nslookup {{ansible_default_ipv4.address}}
+  register: reverse
+  ignore_errors: yes
+  changed_when: no
+
+- name: Add reverse DNS
+  shell: (echo update add {{(ansible_default_ipv4.address.split('.'))[::-1]|join('.')}}.in-addr.arpa 900 ptr {{ ansible_hostname }}.{{ ldap_domain }}.; echo send ) | nsupdate
+  when: reverse.rc != 0

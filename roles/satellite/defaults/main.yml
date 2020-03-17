@@ -1,0 +1,7 @@
+---
+satellite_server: satellite.domain.com
+username: "{{satellite_username}}"
+password: "{{satellite_password}}"
+
+satellite_register: "yes"
+channel_date: '2019-10-11'

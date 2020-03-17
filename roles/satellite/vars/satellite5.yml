@@ -1,0 +1,6 @@
+---
+activation_key_prefix: "{{ '2-register-only' if '6' in ansible_distribution_major_version else '2-rhel7-main' }}"
+
+base_channel: "{{ 'rhel-x86_64-server-7-' + channel_date if '7' in ansible_distribution_major_version else 'rhel-x86_64-server-6-' + channel_date }}"
+
+bootstrap_file_url: http://{{ satellite_server }}/pub/bootstrap/bootstrap.sh

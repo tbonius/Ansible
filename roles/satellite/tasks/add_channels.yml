@@ -1,0 +1,10 @@
+---
+- name: Add channels
+  rhn_channel:
+    name: "{{item}}"
+    sysname: "{{ansible_hostname}}"
+    url: "http://{{satellite_server}}/rpc/api"
+    user: "{{username}}"
+    password: "{{password}}"
+    state: present
+  with_items: "{{channels}}"

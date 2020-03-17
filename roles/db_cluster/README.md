@@ -1,0 +1,35 @@
+Role Name
+=========
+db_cluster
+
+Requirements
+------------
+
+None
+
+
+Role Variables
+--------------
+cluster_state
+
+Dependencies
+------------
+
+
+Example Playbook
+----------------
+
+Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+
+    - hosts: all
+      roles:
+         - { role: db_cluster }
+
+License
+-------
+
+BSD
+
+Author Information
+------------------
+Tbonius

@@ -1,0 +1,2 @@
+---
+key: "{{activation_key_prefix + ansible_distribution_major_version}}"

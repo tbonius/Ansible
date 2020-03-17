@@ -1,0 +1,23 @@
+---
+- name: patch
+  hosts: "{{target}}"
+  strategy: free
+  vars_files: 
+    - group_vars/vault.yml
+  roles:
+    - role: patch
+
+- import_playbook: vmtools.yml
+- import_playbook: java.yml
+
+- import_playbook: remediations.yml
+- name: Final reboot after remediations run.
+  hosts: "{{target}}"
+  tasks:
+    - name: Reboot server
+      shell: "/sbin/shutdown -r +1 &"
+    - name: Check if reboot is complete
+      wait_for_connection:
+        delay: 60
+        sleep: 30
+        timeout: 600

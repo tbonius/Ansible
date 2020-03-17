@@ -1,0 +1,4 @@
+---
+
+insights_display_name: "{{ansible_hostname|lower}}" 
+insights_join: 'yes'

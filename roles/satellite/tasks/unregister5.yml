@@ -1,0 +1,33 @@
+---
+- name: Stop osad
+  service: name=osad state=stopped
+  ignore_errors: yes
+
+- name: Unregister to satellite 5
+  shell: 'spacecmd -u {{username}} -p {{password}} system_delete $(hostname) -y'
+  no_log: True
+  ignore_errors: yes
+
+- name: Remove satellite URL from up2date
+  replace:
+    path: /etc/sysconfig/rhn/up2date
+    regexp: 'serverURL=http://{{satellite_server}}/XMLRPC$'
+    replace: 'serverURL=http://xmlrpc\.rhn\.redhat\.com/XMLRPC'
+  ignore_errors: yes
+
+- name: Uninstall packages
+  yum: pkg={{item}} state=absent
+  with_items:
+    - rhncfg-actions
+    - osad
+    - spacecmd
+
+- name: Remove files
+  file:
+    dest: '{{item}}'
+    state: absent
+  with_items:
+    - /etc/sysconfig/rhn/systemid
+    - /etc/sysconfig/rhn/allowed-actions/script/run
+    - /etc/spacecmd.conf
+    - /root/.spacecmd

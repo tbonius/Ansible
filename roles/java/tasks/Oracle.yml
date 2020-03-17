@@ -1,0 +1,58 @@
+---
+- name: Create Temporary Storage Folder
+  file:
+    path: "{{ java_tmp_storage }}"
+    state: directory
+  
+- name: Download Oracle Java Binary
+  get_url:
+    url: "{{ __java_oracle_download }}/{{__java_oracle_bin}}"
+    headers: 'Cookie:oraclelicense=accept-secure-backup-cookie'
+    dest: "{{ java_tmp_storage }}/{{ __java_oracle_bin }}"
+  when: __java_oracle_bin is defined
+  
+- name: Unpack Oracle Java Binary
+  command: "cd /usr/lib/jvm && bash {{ java_tmp_storage }}/{{ __java_oracle_bin }} -noregister"
+  when: __java_oracle_bin is defined
+  
+- name: Ensure Tar Is Installed
+  package:
+    name: tar
+    state: installed
+  when: __java_oracle_tar is defined
+  
+- name: Download Oracle Java Tar
+  get_url:
+    url: "{{ __java_oracle_download }}/{{__java_oracle_tar}}"
+    headers: 'Cookie:oraclelicense=accept-secure-backup-cookie'
+    dest: "{{ java_tmp_storage }}/{{ __java_oracle_tar }}"
+  when: __java_oracle_tar is defined
+  
+- name: Unpack Oracle Java Tar
+  unarchive:
+    remote_src: yes
+    src: "{{ java_tmp_storage }}/{{ __java_oracle_tar }}"
+    dest: /usr/lib/jvm
+  when: __java_oracle_tar is defined
+  
+#- name: Create a Link For Oracle Java
+#  file:
+#    state: link
+#    dest: /etc/alternatives/java_sdk
+#    src: "/usr/lib/jvm/{{ __java_oracle_directory }}"
+
+#- name: Create Links to Bin Directory for Java
+#  file:
+#    state: link
+#    follow: yes
+#    dest: "/usr/bin/{{ item }}"
+#    src: "{{java_home}}/bin/{{ item }}"
+#  with_items:
+#    - jar
+#    - jarsigner
+#    - java
+#    - javac
+#    - javadoc
+#    - javah
+#    - javap
+

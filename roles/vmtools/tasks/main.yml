@@ -1,0 +1,6 @@
+# Include OS specific tasks
+- include_tasks: vmwaretoolsinstall_RH6.yml
+  when: ansible_distribution_major_version == '6' and ansible_virtualization_type == 'VMware'
+  
+- include_tasks: vmwaretoolsinstall_RH7.yml
+  when: ansible_distribution_major_version == '7' and ansible_virtualization_type == 'VMware'

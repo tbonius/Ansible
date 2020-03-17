@@ -1,0 +1,16 @@
+---
+galaxy_info:
+    author: Cam H PHam
+    description: Install Red Hat Insights Client
+    company: Accenture
+    license: MIT
+    min_ansible_version: 1.2
+    platforms:
+    - name: EL
+      versions:
+      - 6
+      - 7
+    categories:
+    - packaging
+    - system
+    dependencies: []

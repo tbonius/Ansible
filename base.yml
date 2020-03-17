@@ -1,0 +1,19 @@
+- hosts: "{{target}}"
+  tasks:
+    - debug:
+        msg: "Base playbook"
+
+- import_playbook: satellite.yml
+- import_playbook: selinux.yml
+- import_playbook: sssd.yml
+- import_playbook: sudo.yml
+- import_playbook: java.yml
+- import_playbook: splunkforwarder.yml
+- import_playbook: tripwire.yml
+- import_playbook: snmp.yml
+- import_playbook: mcafee.yml
+- import_playbook: vmtools.yml
+- import_playbook: epops.yml
+- import_playbook: limits.yml
+- import_playbook: collectd.yml
+#- import_playbook: insights.yml

@@ -1,0 +1,13 @@
+---
+- name: Check if server is subscribed to base channel
+  shell: "yum repolist | grep {{base_channel}}"
+  args:
+    warn: false  
+  register: checkbasechannel
+  ignore_errors: yes
+  changed_when: no
+
+- name: Change base channel
+  command: "spacecmd -u {{username}} -p {{password}} system_setbasechannel {{ansible_hostname}} {{base_channel}} -y"
+  no_log: True
+  when: checkbasechannel.rc == 1

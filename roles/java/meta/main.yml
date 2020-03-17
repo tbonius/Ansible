@@ -1,0 +1,30 @@
+galaxy_info:
+  author: Cam H Pham
+  description: Modified christopherdavenport.universal-java
+  company: Accenture
+
+  license: MIT
+
+  min_ansible_version: 2.2
+
+  # min_ansible_container_version:
+  # github_branch:
+
+  platforms:
+  - name: EL
+    versions:
+      - all
+
+  galaxy_tags:
+    - jdk
+    - java
+    - oracle
+    - openjdk
+    - universal
+    - application
+    - development
+    - system
+    - installer
+    - tools
+
+dependencies: []

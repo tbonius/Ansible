@@ -1,0 +1,12 @@
+---
+- include_tasks: stop.yml
+  when: "cluster_state == 'stop'"  
+
+- include_tasks: start.yml
+  when: "cluster_state == 'start'"
+  
+- include_tasks: disable_maintenance.yml
+  when: "cluster_state == 'disable'"
+  
+- include_tasks: enable_maintenance.yml
+  when: "cluster_state == 'enable'"

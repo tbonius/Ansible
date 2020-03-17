@@ -1,0 +1,7 @@
+#RHEL 7 Master Sudoers Drop-in File
+
+## Linux Admins
+Cmnd_Alias LNXADM = /bin/su - root, /bin/su - root -c *
+
+### GROUP/USER ALIAS ASSIGNMENTS
+%Linux-Admins                                 ALL = EXEC: LNXADM

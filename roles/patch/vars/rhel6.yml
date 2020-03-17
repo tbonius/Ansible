@@ -1,0 +1,1 @@
+base_channel: "rhel-x86_64-server-6-{{ 'patch_date' }}"

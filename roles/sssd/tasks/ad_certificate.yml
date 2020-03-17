@@ -1,0 +1,20 @@
+---
+# Get the AD DC CA and install it on the system
+
+- name: Query AD DC for CA and save to /tmp/addc.pem
+  shell: "yes | openssl s_client -connect {{ ldap_server_ip }}:636 2>&1 |sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/addc.pem"
+
+# Ubuntu Specific Setup
+# CentOS / RHEL Specific Setup
+- name: Install ca-certificates
+  package: name=ca-certificates state=latest
+  
+- name: Enable dynamic CA configuration
+  shell: update-ca-trust force-enable
+
+- name: Move Certificate to /etc/pki/ca-trust/source/anchors/
+  shell: mv /tmp/addc.pem /etc/pki/ca-trust/source/anchors/addc.pem
+
+- name: Run update-ca-trust extract to update system CAs
+  shell: update-ca-trust extract
+  

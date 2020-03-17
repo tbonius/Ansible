@@ -1,0 +1,9 @@
+---
+# defaults file for patch
+satellite_server: "{{satellite_server}}"
+username: "{{satellite_username}}"
+password: "{{satellite_password}}"
+patch_date: '2019-03-09'
+exclude_apache_update: 'Auto'
+system_state_check: '/usr/local/sbin/systemStateCheck.sh'
+

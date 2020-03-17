@@ -1,0 +1,24 @@
+---
+- name: Include Variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "vars/{{java_type}}-{{java_version}}.yml"
+    - "vars/{{java_type}}.yml"
+  
+- name: Include Steps For Installation
+  include: "{{java_type}}.yml"
+
+#- name: Create a Link For Java Latest
+#  file:
+#    state: link
+#    dest: /opt/java
+#    src: "{{java_home}}"
+#    owner: root
+#    group: root
+
+- name: Set JAVA_HOME
+  template:
+    src: java_home.sh.j2
+    dest: /etc/profile.d/java_home.sh
+    mode: 0644
+  when: java_home|default(None) != None

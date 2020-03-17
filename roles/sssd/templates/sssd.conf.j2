@@ -1,0 +1,30 @@
+[sssd]
+domains = {{ ldap_domain|lower }}
+config_file_version = 2
+services = nss, pam
+
+[domain/{{ ldap_domain|lower }}]
+dyndns_auth = none
+ad_hostname = {{ ansible_hostname|lower }}.{{ ldap_domain|lower }}
+ad_domain = {{ ldap_domain|lower }}
+krb5_realm = {{ ldap_domain|upper }}
+realmd_tags = manages-system joined-with-samba
+cache_credentials = True
+id_provider = ad
+krb5_store_password_if_offline = True
+default_shell = /bin/bash
+ldap_id_mapping = False
+use_fully_qualified_names = False
+fallback_homedir = /home/%u
+access_provider = simple
+
+{% if getAppGroup is defined %}
+simple_allow_groups = {{ custom_allowed_groups }}, {{ getAppGroup }}
+{% else %}
+simple_allow_groups = {{ custom_allowed_groups }}
+{% endif %}
+
+[pam]
+offline_credentials_expiration = 1
+offline_failed_login_attempts = 3
+offline_failed_login_delay = 30

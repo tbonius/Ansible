@@ -1,0 +1,19 @@
+---
+- name: Include Variables
+  include_vars: "vars/satellite{{satellite_version}}.yml"
+
+- include_tasks: register{{satellite_version}}.yml
+  when: satellite_register == 'yes'
+
+- include_tasks: unregister{{satellite_version}}.yml
+  when: satellite_register == 'no'
+
+- name: Install a list of base packages
+  yum:
+    name:
+      - expect
+      - xmlstarlet
+      - subversion
+      - augeas
+    state: present
+    skip_broken: yes

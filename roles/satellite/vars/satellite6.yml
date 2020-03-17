@@ -1,0 +1,5 @@
+---
+activation_key_prefix: 'RHEL'
+
+satellite6_org: 'SATORG'
+katello_cert: "katello-ca-consumer-latest.noarch.rpm"

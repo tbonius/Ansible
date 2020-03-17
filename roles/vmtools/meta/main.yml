@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: LOL
+  description: VMware Tools
+  license: MIT
+  min_ansible_version: 1.0
+  platforms:
+    - name: EL
+      versions:
+        - 6
+        - 7
+  categories:
+    - system
+dependencies: []

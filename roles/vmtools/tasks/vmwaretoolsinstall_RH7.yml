@@ -1,0 +1,4 @@
+---
+- name: Install VMtools
+  yum: name=open-vm-tools
+ 

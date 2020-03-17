@@ -1,0 +1,12 @@
+---
+# Tasks file DB_cluster to stop cluster services
+
+- name: Disable cluster services on both nodes
+  shell: pcs cluster disable --all
+  register: cluster_disable
+  failed_when: cluster_disable.rc != 0
+  
+- name: Stop cluster services on both nodes
+  shell: pcs cluster stop --all
+  register: cluster_services_stop
+  failed_when: cluster_services_stop.rc != 0

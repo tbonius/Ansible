@@ -1,0 +1,11 @@
+- hosts: "{{target}}"
+  tasks:
+    - name: Create a temporary resolv.conf
+      copy:
+        content: |
+          nameserver { nameserver1 }
+          nameserver { nameserver2 }
+        dest: /etc/resolv.conf
+        owner: root
+        group: root
+        mode: 0644

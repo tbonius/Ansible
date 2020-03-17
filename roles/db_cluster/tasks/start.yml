@@ -1,0 +1,12 @@
+---
+# Tasks file DB_cluster to start cluster services
+  
+- name: Start cluster services on both nodes
+  shell: pcs cluster start --all
+  register: cluster_services_start
+  failed_when: cluster_services_start.rc != 0
+
+- name: Enable cluster services on both nodes
+  shell: pcs cluster enable --all
+  register: cluster_enable
+  failed_when: cluster_enable.rc != 0

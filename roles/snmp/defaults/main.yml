@@ -1,0 +1,17 @@
+---
+# defaults file for sbaerlocher.snmp
+ro_community: ro_community
+sys_services: 78
+snmp_user: snmp
+snmp_password: snmp_password
+snmp_encryption: snmp_encryption
+
+snmp_agentadress_protocol:
+  ipv4: udp
+  ipv6: udp6
+snmp_agentadress_adress:
+  ipv4: "{{ ansible_default_ipv4.address|default('127.0.0.1') }}"
+  ipv6: "{{ ansible_default_ipv6.address|default('::1') }}"
+snmp_agentadress_port:
+  ipv4: 161
+  ipv6: 161

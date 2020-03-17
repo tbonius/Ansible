@@ -1,0 +1,8 @@
+---
+# Tasks file for DB_cluster to enable maintenance mode.
+
+- name: Enable cluster maintenance mode
+  shell: pcs property set maintenance-mode=true 
+  register: enable_maintenance_mode
+  failed_when: enable_maintenance_mode.rc != 0 
+ 

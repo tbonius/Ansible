@@ -1,0 +1,3 @@
+---
+# vars file for patch
+base_channel: "{{ 'rhel-x86_64-server-7-' + patch_date if '7' in ansible_distribution_major_version else 'rhel-x86_64-server-6-' + patch_date }}"

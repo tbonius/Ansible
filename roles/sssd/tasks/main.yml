@@ -1,0 +1,25 @@
+---
+# tasks file for SSD role
+
+# WARNING: Do not change this order or the process will fail
+
+
+- block:
+  - include_tasks: dns.yml
+    tags: ad-dns
+  - include_tasks: ntp.yml
+    tags: ntpd
+  - include_tasks: krb5.yml
+    tags: krb5
+  - include_tasks: smb.yml 
+    tags: samba
+  - include_tasks: sssd.yml 
+    tags: sssd
+  - include_tasks: pam.yml
+    tags: pam
+  when: ldap_join
+
+- include_tasks: leave.yml
+  when: not ldap_join
+  
+
