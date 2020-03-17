@@ -1,5 +1,5 @@
-# Ansible
-Test Ansible Repository
+# Demo Ansible Repository
+author: Thomas Foster
 
 This repository is for testing Ansible playbooks and roles that run specifically against RHEL/CENTOS
 Code deposited here is for demostration purposes only
