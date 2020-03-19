@@ -1,7 +1,7 @@
 - hosts: "{{target}}"
   tasks:
     - debug:
-        msg: "Deprovision playbook"
+        msg: "Deprovision host(s) playbook"
         
 - import_playbook: satellite.yml
   vars:

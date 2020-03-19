@@ -1,6 +1,6 @@
 - hosts: "{{target}}"
   tasks:
-    - name: Create a temporary resolv.conf
+    - name: Create a temp resolv.conf
       copy:
         content: |
           nameserver { nameserver1 }
