@@ -1,6 +1,6 @@
 ---
 - name: Spin Up EC2 Server
-  hosts: "{{target}}"
+  hosts: local
   vars_files: 
     - group_vars/vault.yml
   roles:
