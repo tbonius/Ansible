@@ -5,5 +5,5 @@
     keypair: '{{ ec2_server_keypair }}'
     aws_access_key: '{{ ec2_server_access_key }}'
     aws_secret_key: '{{ ec2_server_secret_key }}'      
-    instance_ids: '{{ ec2_instance_id }}'
+    instance_ids: '{{ ec2_server_name }}'
     state: absent
