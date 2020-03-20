@@ -1,6 +1,10 @@
 ---
 - name: Remove EC2 instance(s)
-  - ec2:
-      state: absent
-      instance_tags:
-        Name: '{{ ec2_server_name }}'      
+  ec2:
+    region: '{{ ec2_server_region }}'
+    keypair: '{{ ec2_server_keypair }}'
+    aws_access_key: '{{ ec2_server_access_key }}'
+    aws_secret_key: '{{ ec2_server_secret_key }}'      
+    state: absent
+    instance_tags:
+      Name: '{{ ec2_server_name }}'      
