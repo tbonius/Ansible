@@ -1,0 +1,6 @@
+---
+- name: Remove EC2 instance(s)
+  - ec2:
+      state: absent
+      instance_tags:
+        Name: '{{ ec2_server_name }}'      
