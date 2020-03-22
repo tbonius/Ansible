@@ -3,7 +3,7 @@
   hosts: "{{target}}"
   gather_facts: false
   pre_tasks:
-    - raw: yum -y install python
+    - raw: yum -y install python2
   tasks:
     - name: Update hostname with ec2_server_name
       hostname:
