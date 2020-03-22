@@ -5,7 +5,7 @@
   tasks:
     - name: Update hostname with ec2_server_name
       hostname:
-        name: '{{ inventory_hostname }}'
+        name: '{{ inventory_hostname }}.{{ domain_name }}'
 
     - name: Update /etc/hosts with hostname
       lineinfile:
