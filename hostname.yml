@@ -1,0 +1,22 @@
+---
+- name: Configure hostname
+  hosts: "{{target}}"
+  tasks:
+    - name: Update hostname with ec2_server_name
+      hostname:
+        name: '{{ ec2_server_name }}'
+
+    - name: Update /etc/hosts with hostname
+      lineinfile:
+        dest: /etc/hosts
+        regexp: "^127.0.0.1"
+        line: "127.0.0.1{{'\t'}}{{ec2_server_name}} {{ec2_server_name }}.{{ec2_domain_name}} localhost localhost.localdomain"
+        state: present
+
+    - name: Update /etc/resolv.conf
+      lineinfile:
+        dest: /etc/resolv.conf
+        regexp: "^search"
+        line: "search {{ec2_domain_name}}"
+        state: present
+
