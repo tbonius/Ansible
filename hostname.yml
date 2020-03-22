@@ -1,7 +1,10 @@
 ---
 - name: Configure EC2 Hostname
   hosts: "{{target}}"
-  gather_facts: true
+  gather_facts: false
+  pre_tasks:
+    - name: Install Python
+        raw: yum -y install python
   tasks:
     - name: Update hostname with ec2_server_name
       hostname:
