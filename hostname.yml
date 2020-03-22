@@ -3,8 +3,8 @@
   hosts: "{{target}}"
   gather_facts: false
   pre_tasks:
-    - raw: yum -y install python2
-    - raw: ln -s /usr/bin/python2 /usr/bin/python
+    - raw: yum -y install python3 python3-libselinux
+    - raw: ln -s /usr/bin/python3 /usr/bin/python
   tasks:
     - name: Update hostname with ec2_server_name
       hostname:
