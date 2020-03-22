@@ -1,25 +1,22 @@
 ---
-- name: Configure hostname
+- name: Configure EC2 Hostname
   hosts: "{{target}}"
+  gather_facts: true
   tasks:
     - name: Update hostname with ec2_server_name
       hostname:
-        name: '{{ item.server_name }}'
-      with_items: "{{ ec2.instances }}"
+        name: '{{ inventory_hostname }}'
 
     - name: Update /etc/hosts with hostname
       lineinfile:
         dest: /etc/hosts
         regexp: "^127.0.0.1"
-        line: "127.0.0.1{{'\t'}}{{item.server_name}} {{item.server_name }}.{{item.ec2_domain_name}} localhost localhost.localdomain"
+        line: "127.0.0.1{{'\t'}}{{ inventory_hostname }} {{ inventory_hostname }}.{{ domain_name }} localhost localhost.localdomain"
         state: present
-      with_items: "{{ ec2.instances }}"
 
     - name: Update /etc/resolv.conf
       lineinfile:
         dest: /etc/resolv.conf
         regexp: "^search"
-        line: "search {{item.ec2_domain_name}}"
+        line: "search {{ domain_name }}"
         state: present
-      with_items: "{{ ec2.instances }}"
-
