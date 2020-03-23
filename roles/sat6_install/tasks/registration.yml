@@ -77,7 +77,9 @@
 
 #YUM update the entire system first
 - name: "RHN | Perform yum update of the whole system"
-  command: "yum update -y"
+  yum:
+    name: '*'
+    state: latest
 
 # TODO - Turn this into a variable.
 # - name: "RHN | enabling the right repos"
