@@ -69,11 +69,11 @@
     state: absent
 
 - name: Update /etc/yum/pluginconf.d/product-id.conf
-      lineinfile:
-        dest: /etc/yum/pluginconf.d/product-id.conf
-        regexp: "^enabled"
-        line: "enabled=1"
-        state: present
+  lineinfile:
+    dest: /etc/yum/pluginconf.d/product-id.conf
+    regexp: "^enabled"
+    line: "enabled=1"
+    state: present
 
 #YUM update the entire system first
 - name: "RHN | Perform yum update of the whole system"
