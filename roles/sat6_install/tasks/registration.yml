@@ -16,7 +16,6 @@
     - "rhn"
     - "skip_ansible_lint" # ANSIBLE0012
 
-
 - name: "Check if Satellite is subscribed"
   shell: "/usr/sbin/subscription-manager list --consumed
     --matches='Satellite*' | awk '/Pool ID/ {print $3}'"
@@ -51,7 +50,6 @@
   ignore_errors: "yes"
   when: not satellite_deployment_subscribed.stdout
 
-
 #Disable all repos first
 - name: "RHN | turn off all repos"
   command: "/usr/sbin/subscription-manager repos --disable '*'"
@@ -63,6 +61,23 @@
   tags:
     - "rhn"
     - "skip_ansible_lint" # ANSIBLE0012
+
+#YUM remove the RHUI client
+- name: "Remove the RHUI client on AWS systems"
+  yum:
+    name: 'rh-amazon-rhui-client*'
+    state: absent
+
+- name: Update /etc/yum/pluginconf.d/product-id.conf
+      lineinfile:
+        dest: /etc/yum/pluginconf.d/product-id.conf
+        regexp: "^enabled"
+        line: "enabled=1"
+        state: present
+
+#YUM update the entire system first
+- name: "RHN | Perform yum update of the whole system"
+  command: "yum update -y"
 
 # TODO - Turn this into a variable.
 # - name: "RHN | enabling the right repos"
