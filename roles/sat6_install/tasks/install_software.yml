@@ -15,7 +15,12 @@
     satellite_deployment_extra_packages + satellite_deployment_plugin_packages
     }}"
     state: "latest"
-  tags:
-    - "install"
-    - "update_satellite"
-    - "skip_ansible_lint" # ANSIBLE0010
+    async: 1000
+    poll: 0
+    register: sat_sleeper
+
+- name: 'YUM - check on satellite installation'
+  async_status: jid={{ sat_sleeper.ansible_job_id }}
+  register: job_result
+  until: job_result.finished
+  retries: 50
