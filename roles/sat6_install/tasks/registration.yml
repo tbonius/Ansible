@@ -44,12 +44,12 @@
   yum:
     name: '*'
     state: latest
-    async: 1200
-    poll: 0
-    register: yum_sleeper
+    #async: 1200
+    #poll: 0
+    #register: yum_sleeper
 
-- name: 'YUM - check on YUM update in the background'
-  async_status: jid={{ yum_sleeper.ansible_job_id }}
-  register: job_result
-  until: job_result.finished
-  retries: 50
+#- name: 'YUM - check on YUM update in the background'
+#  async_status: jid={{ yum_sleeper.ansible_job_id }}
+#  register: job_result
+#  until: job_result.finished
+#  retries: 50
