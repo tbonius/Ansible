@@ -11,7 +11,7 @@
       lineinfile:
         dest: /etc/hosts
         regexp: "^127.0.0.1"
-        line: "127.0.0.1{{'\t'}}{{ inventory_hostname }} {{ inventory_hostname }}.{{ domain_name }} localhost localhost.localdomain"
+        line: "127.0.0.1{{'\t'}}{{ inventory_hostname }}.{{ domain_name }} {{ inventory_hostname }} localhost localhost.localdomain"
         state: present
 
     - name: Update /etc/resolv.conf
