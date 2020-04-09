@@ -1,0 +1,15 @@
+---
+
+- name: Create /var/log/sqldumps
+  file:
+    path: /var/log/sqldumps
+    owner: postgres
+    group: postgres
+    mode: 0775
+    state: directory
+
+- name: Backup Database
+  shell: 'sudo su - postgres -c "pg_dumpall | gzip -c > /var/log/sqldumps/uninstall-backup.gz"'
+
+- name: Run Katello remove
+  shell: "katello-remove -y"

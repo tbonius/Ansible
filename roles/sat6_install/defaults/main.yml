@@ -3,7 +3,7 @@
 # Go over variables below and pass them in extra vars, playbook vars,
 # vars_files, inventory file or whatever which overwrite these values!
 
-
+satellite_state: install
 # main:
 # version should be double! Not string!
 satellite_deployment_version: 6.6
