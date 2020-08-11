@@ -2,54 +2,23 @@
 # tasks file for patch
 #
 
-- name: Install spacecmd
-  package:
-    name: spacecmd
-    state: present
+#- name: Create systemStateCheck - /usr/local/sbin/systemStateCheck.sh
+#  template: src=systemStateCheck.j2 dest=/usr/local/sbin/systemStateCheck.sh owner=root mode=0770
 
-- name: Configure spacecmd
-  template: 
-    src: spacecmd_conf.j2
-    dest: /etc/spacecmd.conf
-    owner: root
-    group: root
-    mode: 0644
+#- name: Cron systemStateCheck
+#  cron:
+#    name: "Setup cron"
+#    minute: "0"
+#    hour: "5"
+#    job: "/usr/local/sbin/systemStateCheck.sh"
+#    user: root
+#    state: present
 
-- name: Check if server is subscribed to base channel
-  shell: "yum repolist | grep {{base_channel}}"
-  args:
-    warn: false  
-  register: checkbasechannel
-  ignore_errors: yes
-  changed_when: no
-
-- name: Change base channel
-  command: "spacecmd -u {{username}} -p {{password}} system_setbasechannel {{ansible_hostname}} {{base_channel}} -y"
-  no_log: False
-  when: checkbasechannel.rc == 1
-
-- name: Create systemStateCheck - /usr/local/sbin/systemStateCheck.sh
-  template: src=systemStateCheck.j2 dest=/usr/local/sbin/systemStateCheck.sh owner=root mode=0770
-
-- name: Cron systemStateCheck
-  cron:
-    name: "Setup cron"
-    minute: "0"
-    hour: "5"
-    job: "/usr/local/sbin/systemStateCheck.sh"
-    user: root
-    state: present
-
-- name: Run systemStateCheck
-  shell: "/usr/local/sbin/systemStateCheck.sh"
+#- name: Run systemStateCheck
+#  shell: "/usr/local/sbin/systemStateCheck.sh"
 
 - name: Run yum update
   shell: "yum update -y > /usr/local/sbin/yumlog"
-  when: ( "web" not in ansible_hostname and exclude_apache_update == "Auto" ) or exclude_apache_update == "No"
-
-- name: Run yum update excluding Apache
-  shell: "yum update --exclude=httpd* --exclude=mod_ssl* -y > /usr/local/sbin/yumlog"
-  when: ( "web" in ansible_hostname and exclude_apache_update == "Auto" ) or exclude_apache_update == "Yes"
 
 - name: Check in yum log requires a reboot
   shell: "grep -i 'No Packages marked for Update' /usr/local/sbin/yumlog"
