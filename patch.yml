@@ -2,10 +2,7 @@
 - name: patch
   hosts: "{{target}}"
   strategy: free
-  vars_files: 
-    - group_vars/vault.yml
   roles:
     - role: patch
 
 - import_playbook: vmtools.yml
-- import_playbook: java.yml
