@@ -1,6 +1,6 @@
 ---
 __java_oracle_bin: jdk-6u211-linux-x64.bin
-__java_oracle_download: http://va1mgtlsat10.mgt.afsiep.net/pub/software_updates/JDK/
+__java_oracle_download: http://downloads.server.com/JDK/
 __java_oracle_directory: jdk1.6.0_211
 
 java_home: "/usr/lib/jvm/{{__java_oracle_directory}}"
