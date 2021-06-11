@@ -8,8 +8,8 @@ ntp_manage_config: false
 # See: http://support.ntp.org/bin/view/Servers/NTPPoolServers
 ntp_area: ''
 ntp_servers:
-  - "time-co.afsiep.net"
-  - "time-va.afsiep.net"
+  - "ntp1.com"
+  - "ntp2.com"
 ntp_restrict:
   - "127.0.0.1"
   - "::1"
