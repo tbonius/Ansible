@@ -32,17 +32,17 @@
       service:
         name: eap72
         state: restarted
-      when: "{{ mempercent.stdout | int }} > {{ memthreshold | int }}" and "'svc_jb' in memowner.stdout"
+      when: "{{ mempercent.stdout | int }} > {{ memthreshold | int }} and 'svc_jb' in memowner.stdout"
       
     - name: Restart Apache process if needed
       service:
         name: httpd
         state: restarted
-      when: "{{ mempercent.stdout | int }} > {{ memthreshold }}" and "'svc_apa' in memowner.stdout"
+      when: "{{ mempercent.stdout | int }} > {{ memthreshold }} and 'svc_apa' in memowner.stdout"
       
     - name: Kill Non-Common agent if needed
       shell: "/usr/bin/kill -HUP {{mempid.stdout}}"
-      when: "{{ mempercent.stdout | int }} > {{ memthreshold }}" and "'svc_jb' not in memowner.stdout" and "'svc_apa' not in memowner.stdout"
+      when: "{{ mempercent.stdout | int }} > {{ memthreshold }} and 'svc_jb' not in memowner.stdout and 'svc_apa' not in memowner.stdout"
       
     - name: All memory within threshold. No Tasks Done
       debug:
