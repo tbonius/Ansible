@@ -1,0 +1,48 @@
+---
+
+- name: Heal Memory
+  hosts: "{{target}}"
+  tasks: 
+ 
+	  - name: Register memusage var
+		shell: “ps -eo %mem,size,user,pid | sort -rnk 1 | head -n 1”
+		args:
+		  warn: false
+		register: memusage
+
+      - name: Register mempercent var
+		shell: “ps -eo %mem | sort -rnk 1 | head -n 1”
+		args:
+		  warn: false
+		register: mempercent
+
+	  - name: Register memowner var
+		shell: “ps -eo %mem,size,user,pid | sort -rnk 1 | head -n 1 | awk '{print $3}'”
+		args:
+		  warn: false
+		register: memowner
+
+	  - name: Register memthreshold var
+		memthreshold: 2
+
+	  - name: Restart JBOSS process (if needed)
+		service:
+		  name: eap72
+		  state: restarted
+		when: (mempercent.stdout > memthreshold) and ('svc_jb' in memowner.stdout)
+		 
+	  - name: Restart Apache process (if needed)
+		service:
+		  name: httpd
+		  state: restarted
+		when: (mempercent.stdout > memthreshold) and ('svc_apa' in memowner.stdout)
+		
+	  - name: Kill Non-Common agent if needed
+		shell: "kill -HUP ${memusage[1]}"
+		when: (mempercent.stdout > memthreshold) and (memowner.stdout != 'svc_jb') and (memowner.stdout != 'svc_apa)
+		  
+	  - name: All memory within threshold. No Tasks Done
+		debug
+		  msg:
+		    - "All memory within acceptable limits!"
+		when: (mempercent.stdout < memthreshold)
