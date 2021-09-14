@@ -5,25 +5,25 @@
     memthreshold: 75
   tasks: 
     - name: Register memusage var
-      shell: '/usr/bin/ps -eo %mem,size,user,pid | sort -rnk 1 | head -n 1'
+      shell: "/usr/bin/ps -eo %mem,size,user,pid | sort -rnk 1 | head -n 1"
       args:
         warn: false
       register: memusage
 
     - name: Register mempercent var
-      shell: '/usr/bin/ps -eo %mem | sort -rnk 1 | head -n 1'
+      shell: "/usr/bin/ps -eo %mem | sort -rnk 1 | head -n 1"
       args:
         warn: false
       register: mempercent
 
     - name: Register memowner var
-      shell: "/usr/bin/ps -eo %mem,size,user,pid | sort -rnk 1 | head -n 1 | awk '{print $3}'”
+      shell: "/usr/bin/ps -eo %mem,size,user,pid | sort -rnk 1 | head -n 1 | awk '{print $3}'"
       args:
         warn: false
       register: memowner
       
     - name: Register mempid var
-      shell: "/usr/bin/ps -eo %mem,size,user,pid | sort -rnk 1 | head -n 1 | awk '{print $4}'”
+      shell: "/usr/bin/ps -eo %mem,size,user,pid | sort -rnk 1 | head -n 1 | awk '{print $4}'"
       args:
         warn: false
       register: mempid
