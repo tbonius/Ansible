@@ -1,7 +1,8 @@
 ---
 - name: Heal Memory
   hosts: "{{target}}"
-  memthreshold: 75
+  vars:
+    memthreshold: 75
   tasks: 
     - name: Register memusage var
       shell: “ps -eo %mem,size,user,pid | sort -rnk 1 | head -n 1”
