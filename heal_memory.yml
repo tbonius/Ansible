@@ -28,13 +28,13 @@
         warn: false
       register: mempid
  
-    - name: Restart JBOSS process (if needed)
+    - name: Restart JBOSS process if needed
       service:
         name: eap72
         state: restarted
       when: (mempercent.stdout > memthreshold) and ('svc_jb' in memowner.stdout)
       
-    - name: Restart Apache process (if needed)
+    - name: Restart Apache process if needed
       service:
         name: httpd
         state: restarted
