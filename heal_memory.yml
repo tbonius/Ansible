@@ -5,13 +5,13 @@
     memthreshold: 75
   tasks: 
     - name: Register memusage var
-      shell: "/usr/bin/ps -eo %mem,size,user,pid | sort -rnk 1 | head -n 1"
+      shell: "/usr/bin/ps -eo %mem,size,user,pid | sort -rnk 1 | head -n 1 | xargs"
       args:
         warn: false
       register: memusage
 
     - name: Register mempercent var
-      shell: "/usr/bin/ps -eo %mem | sort -rnk 1 | head -n 1"
+      shell: "/usr/bin/ps -eo %mem | sort -rnk 1 | head -n 1 | xargs"
       args:
         warn: false
       register: mempercent
@@ -32,20 +32,20 @@
       service:
         name: eap72
         state: restarted
-      when: "{{ mempercent.stdout | int }} > {{ memthreshold | int }} and 'svc_jb' in memowner.stdout"
+      when: "mempercent.stdout|int > memthreshold|int and 'svc_jb' in memowner.stdout"
       
     - name: Restart Apache process if needed
       service:
         name: httpd
         state: restarted
-      when: "{{ mempercent.stdout | int }} > {{ memthreshold }} and 'svc_apa' in memowner.stdout"
+      when: "mempercent.stdout|int > memthreshold|int and 'svc_apa' in memowner.stdout"
       
     - name: Kill Non-Common agent if needed
       shell: "/usr/bin/kill -HUP {{mempid.stdout}}"
-      when: "{{ mempercent.stdout | int }} > {{ memthreshold }} and 'svc_jb' not in memowner.stdout and 'svc_apa' not in memowner.stdout"
+      when: "mempercent.stdout|int > memthreshold|int and 'svc_jb' not in memowner.stdout and 'svc_apa' not in memowner.stdout"
       
     - name: All memory within threshold. No Tasks Done
       debug:
         msg:
           - "All memory within acceptable limits!"
-      when: (mempercent.stdout < memthreshold)
+      when: "mempercent.stdout|int < memthreshold|int"
