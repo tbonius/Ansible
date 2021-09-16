@@ -42,8 +42,7 @@
 
     - name: Set password age for root
       shell: "/usr/bin/chage -d `date +%F` root"
-    
-    
+      
     - name: Remove any RPM database locks
       shell: "rm -f /var/lib/rpm/.rpm.lock"
       args:
