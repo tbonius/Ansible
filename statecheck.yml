@@ -1,0 +1,92 @@
+---
+- name: Run System State Check in Ansible
+  hosts: "{{target}}"
+  gather_facts: yes
+  strategy: "{{ set_strategy | default(lookup('config', 'DEFAULT_STRATEGY')) }}"
+  tasks:
+    - name: Remove extraneous Postfix Maildrop files
+      shell: "/usr/bin/find /var/spool/postfix/maildrop/ -name '*' -type f -print0 | xargs -0 rm -f"
+    
+    - name: Clean YUM cache
+      shell: "/usr/bin/yum clean all"
+      args:
+        warn: false
+    
+    - name: Clean SysLog
+      shell: "/bin/rm -rf /var/lib/rsyslog/*"
+      args:
+        warn: false
+    
+    - name: Perform Logrotate
+      shell: "/usr/sbin/logrotate -f /etc/logrotate.conf"
+    
+    - name: Clean old gzipped logs in /var/log
+      shell: "/bin/rm -rf /var/log/*.gz"
+      args:
+        warn: false
+    
+    - name: Clean old non zipped logs in /var/log
+      shell: "/bin/rm -rf /var/log/*-20[1-9][0-9][01][0-9][0-3][0-9]"
+      args:
+        warn: false
+    
+    - name: Clean any old crash logs
+      shell: "/bin/rm -rf /var/crash/*"
+      args:
+        warn: false
+    
+    - name: Clean vi swp files from /etc/sudoers.d
+      shell: "/bin/rm -f /etc/sudoers.d/.*.swp"
+      args:
+        warn: false
+
+    - name: Set password age for root
+      shell: "/usr/bin/chage -d `date +%F` root"
+    
+    
+    - name: Remove any RPM database locks
+      shell: "rm -f /var/lib/rpm/.rpm.lock"
+      args:
+        warn: false
+    
+    - name: Cleanup RPM database files
+      shell: "rm -f /var/lib/rpm/__db.*"
+      args:
+        warn: false
+    
+    - name: Rebuild RPM database
+      shell: "rpm --rebuilddb"
+      args:
+        warn: false
+    
+    - name: Perform /var check
+      shell: "df -k /var |tail -n 1 |awk '{print $4}'"
+      register: var_check
+    
+    - name: Get list of top offenders on /var
+      shell: "timeout 60 du -xa /var | sort -n -r | head -n 10"
+      register: top_var_files
+    
+    - name: Perform /opt check
+      shell: "df -h /opt | sed -n 2p | awk  '/\\//{print $(NF-1)}' | sed 's/%//'"
+      register: opt_check
+    
+    - name: Get list of top offenders on /opt
+      shell: "timeout 60 du -xa /opt | sort -n -r | head -n 10"
+      register: top_opt_files
+    
+    - name: Fail system state check if /var does not have 1.75 GB space
+      fail:
+        msg: 
+          - "/var partition size check FAILED! Please clear free space on /var partition to at least 1.75 GiB Available."
+          - "Printing top 10 largest file locations in /var"
+          - "{{ top_var_files.stdout.split(\n) }}"
+      when: var_check.stdout|int < 1750000
+    
+    - name: Fail system state check if /opt does not have at least 85% space free
+      fail:
+        msg: 
+          - "/opt partition size check FAILED! Please clear /opt partition to 85% or less."
+          - "Printing top 10 largest file locations in /opt"
+          - "{{ top_opt_files.stdout.split(\n) }}"
+      when: opt_check.stdout|int > 85
