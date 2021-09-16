@@ -17,10 +17,10 @@
       args:
         warn: false
     
-    - name: Perform Logrotate
-      shell: "/usr/sbin/logrotate -f /etc/logrotate.conf"
-      args:
-        warn: false
+    #- name: Perform Logrotate
+    #  shell: "/usr/sbin/logrotate -f /etc/logrotate.conf"
+    #  args:
+    #    warn: false
     
     - name: Clean old gzipped logs in /var/log
       shell: "/bin/rm -rf /var/log/*.gz"
