@@ -12,6 +12,7 @@
     aws_secret_key: '{{ ec2_server_secret_key }}'
     instance_tags:
       Name: '{{ ec2_server_name }}'
+      Group: '{{ ec2_group_name }}'
   register: ec2
 
 - name: Instance Ids
