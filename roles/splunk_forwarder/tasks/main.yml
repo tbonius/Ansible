@@ -1,0 +1,103 @@
+---
+- name: Create Splunk group
+  group:
+    name: "{{ splunk_forwarder_group }}"
+    gid: "{{ splunk_forwarder_gid }}"
+    state: present
+  tags: splunk_user
+
+- name: Create Splunk user
+  user:
+    name: "{{ splunk_forwarder_user }}"
+    group: "{{ splunk_forwarder_group }}"
+    uid: "{{ splunk_forwarder_uid }}"
+    state: present
+  tags: splunk_user
+
+- name: Download the Splunk package (Debian/Ubuntu)
+  get_url:
+    url: "{{ splunk_deb }}"
+    dest: "/tmp/{{ splunk_forwarder_deb }}"
+    checksum: "{{ splunk_deb_checksum }}"
+  when: ansible_os_family == "Debian"
+
+- name: Install Splunk (Debian/Ubuntu)
+  apt:
+    deb: "/tmp/{{ splunk_forwarder_deb }}"
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Download the Splunk package (CentOS)
+  get_url:
+    url: "{{ splunk_rpm }}"
+    dest: "/tmp/{{ splunk_forwarder_rpm }}"
+    checksum: "{{ splunk_rpm_checksum }}"
+  when: ansible_os_family == "RedHat"
+
+- name: Install Splunk (python2 yum)
+  yum:
+    name: "/tmp/{{ splunk_forwarder_rpm }}"
+    state: present
+  when: ansible_os_family == "RedHat" and ansible_facts.python.version.major | int < 3
+
+- name: Install Splunk (python3 dnf)
+  dnf:
+    name: "/tmp/{{ splunk_forwarder_rpm }}"
+    disable_gpg_check: true
+    state: present
+  when: ansible_os_family == "RedHat" and ansible_facts.python.version.major | int >= 3
+
+- name: Copy user seeds file
+  template:
+    src: user-seed.conf.j2
+    dest: /opt/splunkforwarder/etc/system/local/user-seed.conf
+    mode: 0664
+    backup: true
+  when: splunk_forwarder_admin_user is defined and splunk_forwarder_admin_pass is defined
+  tags: config_copy
+
+- name: Copy deploymentclient file
+  template:
+    src: deploymentclient.conf.j2
+    dest: /opt/splunkforwarder/etc/system/local/deploymentclient.conf
+    mode: 0664
+    backup: true
+  when: splunk_forwarder_depl_server is defined
+  tags: config_copy
+
+- name: Copy inputs file
+  template:
+    src: inputs.conf.j2
+    dest: /opt/splunkforwarder/etc/system/local/inputs.conf
+    mode: 0664
+    backup: true
+  tags: config_copy
+
+- name: Copy outputs file
+  template:
+    src: outputs.conf.j2
+    dest: /opt/splunkforwarder/etc/system/local/outputs.conf
+    mode: 0664
+    backup: true
+  tags: config_copy
+
+- name: Set logfile permissions
+  acl:
+    path: "{{ item }}"
+    entity: "{{ splunk_forwarder_user }}"
+    state: present
+    etype: user
+    permissions: r
+    recursive: true
+  become: true
+  with_items: "{{ splunk_forwarder_logs }}"
+
+- name: Upload Splunk Systemd Script
+  copy:
+    src: splunk.service
+    dest: /etc/systemd/system/splunkd.service
+    owner: root
+    group: root
+    mode: 0755
+  notify: Enable Splunk Forwarder
+  when: ansible_service_mgr == 'systemd'

@@ -1,0 +1,14 @@
+#
+# This file is maintained by ansible
+# Any local changes will be reverted.
+###
+[default]
+index = {{ splunk_forwarder_index }}
+
+blacklist = \.bz2$
+ignoreOlderThan = 7d
+sourcetype = {{ splunk_forwarder_sourcetype }}
+
+{% for input_src in splunk_forwarder_logs %}
+[monitor://{{ input_src }}]
+{% endfor %}
