@@ -1,0 +1,5 @@
+---
+- name: Install Splunk
+  hosts: "{{target}}"
+  roles:
+    - role: splunk_forwarder
