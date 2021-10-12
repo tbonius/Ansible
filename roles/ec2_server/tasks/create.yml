@@ -2,6 +2,7 @@
 - name: Create EC2 Instance(s)
   ec2:
     group_id: '{{ ec2_server_security_group }}'
+    vpc_subnet_id: '{{ ec2_vpc_subnet_id }}'
     count: '{{ ec2_server_instcount }}'
     instance_type: '{{ ec2_server_instance_type }}'
     image: '{{ ec2_server_image }}'
