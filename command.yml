@@ -1,0 +1,8 @@
+---
+- name: Run command
+  hosts: "{{target}}"
+  tasks:
+    - name: Run command
+      shell: "{{ command }}"
+      args:
+        warn: False
