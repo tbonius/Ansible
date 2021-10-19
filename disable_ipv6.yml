@@ -1,11 +1,20 @@
 ---
-- include_vars: harden.yml
+- name: Disable IPV6
+  hosts: "{{target}}"
+  vars:
+    harden:
+     #Disable IPV6 
+    - name: net.ipv6.conf.all.disable_ipv6
+      value: 1
+    - name: net.ipv6.conf.default.disable_ipv6
+      value: 1
 
-- name: Set sysctl parameters to disable IPV6
-  sysctl:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    state: present
-    ignoreerrors: yes
-    reload: yes
-  with_items: "{{ harden }}"
+  tasks:
+  - name: Set sysctl parameters to disable IPV6
+    sysctl:
+      name: "{{ item.name }}"
+      value: "{{ item.value }}"
+      state: present
+      ignoreerrors: yes
+      reload: yes
+    with_items: "{{ harden }}"
