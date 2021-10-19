@@ -1,0 +1,11 @@
+---
+- include_vars: harden.yml
+
+- name: Set sysctl parameters to disable IPV6
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    ignoreerrors: yes
+    reload: yes
+  with_items: "{{ harden }}"
