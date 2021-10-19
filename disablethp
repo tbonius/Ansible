@@ -1,0 +1,23 @@
+---
+# tasks file for disable_THP
+#
+
+- name: Grab output of GRUB_CMDLINE_LINUX line 
+    shell: "grep 'GRUB_CMDLINE_LINUX' /etc/default/grub"
+    register: grub_output
+
+    - name: Insert grub_output with and add transparent_hugepage=never
+      lineinfile:
+        path: /etc/default/grub
+        regexp: '^GRUB_CMDLINE_LINUX'
+        line: '{{grub_output.stdout[:-1]}} transparent_hugepage=never"'
+        
+    - name: Copy grub configuration file timestamp
+      shell: cp /boot/grub2/grub.cfg /root/grub.cfg.bak
+      
+    - name : Rebuild the /boot/grub2/grub.cfg file 
+      shell: grub2-mkconfig -o /boot/grub2/grub.cfg
+      
+    - name: Reboot a Linux machine 
+      reboot:
+        test_command: uptime
