@@ -101,3 +101,7 @@
     mode: 0755
   notify: Enable Splunk Forwarder
   when: ansible_service_mgr == 'systemd'
+
+- name: Reboot after possible config change on existing install 
+  reboot:
+    test_command: uptime
