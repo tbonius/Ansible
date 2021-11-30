@@ -28,11 +28,11 @@
         warn: false
       register: cpupid
           
-    - name: Kill Non-Common agent if needed
+    - name: Kill offending agent if needed
       shell: "/usr/bin/kill -HUP {{cpupid.stdout}}"
-	    debug:
-	      msg:
-	        - "{{ cpuowner }} user with process ID {{ cpupid }} is above the {{ cputhreshold }}% limit! Killing process!"
+      debug:
+        msg:
+          - "{{ cpuowner }} user with process ID {{ cpupid }} is above the {{ cputhreshold }}% limit! Killing process!"
       when: "cpupercent.stdout|int > cputhreshold|int"
     
     - name: All cpu within threshold. No Tasks Done
