@@ -1,0 +1,39 @@
+---
+- name: Heal CPU
+  hosts: "{{target}}"
+  vars:
+    memthreshold: 75
+  tasks: 
+    - name: Register cpuusage var
+      shell: "/usr/bin/ps -eo %cpu,user,pid | sort -rnk 1 | head -n 1 | xargs"
+      args:
+        warn: false
+      register: cpuusage
+
+    - name: Register cpupercent var
+      shell: "/usr/bin/ps -eo %cpu | sort -rnk 1 | head -n 1 | xargs"
+      args:
+        warn: false
+      register: cpupercent
+
+    - name: Register cpuowner var
+      shell: "/usr/bin/ps -eo %cpu,user,pid | sort -rnk 1 | head -n 1 | awk '{print $2}'"
+      args:
+        warn: false
+      register: cpuowner
+      
+    - name: Register cpupid var
+      shell: "/usr/bin/ps -eo %cpu,user,pid | sort -rnk 1 | head -n 1 | awk '{print $3}'"
+      args:
+        warn: false
+      register: cpupid
+          
+    - name: Kill Non-Common agent if needed
+      shell: "/usr/bin/kill -HUP {{cpupid.stdout}}"
+      when: "cpupercent.stdout|int > cputhreshold|int"
+      
+    - name: All cpu within threshold. No Tasks Done
+      debug:
+        msg:
+          - "CPU usage within acceptable limits!"
+      when: "cpupercent.stdout|int < cputhreshold|int"
