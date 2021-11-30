@@ -42,9 +42,10 @@
       
     - name: Kill Non-Common agent if needed
       shell: "/usr/bin/kill -HUP {{mempid.stdout}}"
-      when: "mempercent.stdout|int > memthreshold|int and 'jboss' not in memowner.stdout and 'apache' not in memowner.stdout"
-      msg:
-        - "{{ memowner }} with process ID {{ mempid }} is above {{ memthreshold }}% limit! Killing process!"
+	    debug:
+	      msg:
+	        - "{{ memowner }} user with process ID {{ mempid }} is above the {{ memthreshold }}% limit! Killing process!"
+      when: "mempercent.stdout|int > memthreshold|int"
       
     - name: All memory within threshold. No Tasks Done
       debug:
