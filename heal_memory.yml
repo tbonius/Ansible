@@ -39,12 +39,15 @@
         name: httpd
         state: restarted
       when: "mempercent.stdout|int > memthreshold|int and 'apache' in memowner.stdout"
+    
+    - name: Report offending agent
+      debug:
+        msg:
+          - "User: {{ memowner.stdout }} with process ID: {{ mempid.stdout }} is above the {{ memthreshold }}% limit! Killing offending process!"
+      when: "mempercent.stdout|int > memthreshold|int"
       
-    - name: Kill Non-Common agent if needed
+    - name: Kill non-common offending agent
       shell: "/usr/bin/kill -HUP {{mempid.stdout}}"
-	    debug:
-	      msg:
-	        - "{{ memowner }} user with process ID {{ mempid }} is above the {{ memthreshold }}% limit! Killing process!"
       when: "mempercent.stdout|int > memthreshold|int"
       
     - name: All memory within threshold. No Tasks Done
