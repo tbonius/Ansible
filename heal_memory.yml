@@ -44,7 +44,7 @@
       shell: "/usr/bin/kill -HUP {{mempid.stdout}}"
       when: "mempercent.stdout|int > memthreshold|int and 'jboss' not in memowner.stdout and 'apache' not in memowner.stdout"
       msg:
-        - "{{ memowner }} with process ID {{ mempid }} is above {{ memthrehold }}% limit! Killing process!"
+        - "{{ memowner }} with process ID {{ mempid }} is above {{ memthreshold }}% limit! Killing process!"
       
     - name: All memory within threshold. No Tasks Done
       debug:
