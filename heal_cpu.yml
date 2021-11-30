@@ -2,7 +2,7 @@
 - name: Heal CPU
   hosts: "{{target}}"
   vars:
-    memthreshold: 75
+    cputhreshold: 75
   tasks: 
     - name: Register cpuusage var
       shell: "/usr/bin/ps -eo %cpu,user,pid | sort -rnk 1 | head -n 1 | xargs"
