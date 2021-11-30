@@ -31,14 +31,14 @@
     - name: Report offending agent
       debug:
         msg:
-          - "{{ cpuowner.stdout }} user with process ID {{ cpupid.stdout }} is above the {{ cputhreshold }}% limit! Killing process!"
+          - "User: {{ cpuowner.stdout }} with process ID: {{ cpupid.stdout }} is above the {{ cputhreshold }}% limit! Killing offending process!"
       when: "cpupercent.stdout|int > cputhreshold|int"
       
-    - name: Kill offending agent if needed
+    - name: Kill offending agent
       shell: "/usr/bin/kill -HUP {{cpupid.stdout}}"
       when: "cpupercent.stdout|int > cputhreshold|int"
     
-    - name: All cpu within threshold. No Tasks Done
+    - name: Report all clear
       debug:
         msg:
           - "CPU usage within acceptable limits!"
