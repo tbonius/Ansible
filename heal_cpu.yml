@@ -32,7 +32,7 @@
       shell: "/usr/bin/kill -HUP {{cpupid.stdout}}"
       when: "cpupercent.stdout|int > cputhreshold|int"
       msg:
-        - " {{ cpuowner }} with process ID {{ cpupid }} is above {{ memthrehold }}% limit! Killing process!
+        - " {{ cpuowner }} with process ID {{ cpupid }} is above {{ cputhreshold }}% limit! Killing process!
     
     - name: All cpu within threshold. No Tasks Done
       debug:
