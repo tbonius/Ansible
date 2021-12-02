@@ -102,7 +102,8 @@
   notify: Enable Splunk Forwarder
   when: ansible_service_mgr == 'systemd'
 
-- name: restart splunkd in the case of config change on existing install
+- name: restart and enable on boot splunkd agent in the case of config change on existing install
   ansible.builtin.service:
     name: splunkd
+    enabled: yes
     state: restarted
