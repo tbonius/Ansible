@@ -3,16 +3,16 @@
   hosts: "{{ target }}"
   tasks:
     - name: Yum Check and/or install EPEL Repo 
-	  yum:
+      yum:
         name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
         state: present
 	
-	- name: Check for Stress package
-	  yum:
-        name: stress
-		state: present
+     - name: Check for Stress package
+       yum:
+         name: stress
+         state: present
 	
-	- name: Run command
-      shell: "sudo stress --vm 1 --vm-bytes 3.8G --timeout 500s"
-      args:
-        warn: False
+     - name: Run command
+       shell: "sudo stress --vm 1 --vm-bytes 3.8G --timeout 500s"
+       args:
+         warn: False
