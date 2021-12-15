@@ -1,0 +1,9 @@
+---
+- name: Run command
+  hosts: "{{ target }}"
+  tasks:
+      
+    - name: Run command
+      shell: fallocate -l 6G /var/log/unknown_app.log
+      args:
+        warn: False
