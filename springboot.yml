@@ -1,0 +1,13 @@
+---
+- name: Install Java
+  hosts: "{{target}}"
+  roles:
+    - role: java
+      vars:
+        java_version: 8
+        java_type: Oracle
+
+- name: Install Spring Boot Demo
+  hosts: "{{target}}"
+  roles:
+    - role: spring_boot_demo

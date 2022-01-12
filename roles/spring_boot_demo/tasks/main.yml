@@ -1,0 +1,9 @@
+---
+- name: Download the Spring Boot demo (CentOS)
+  get_url:
+    url: "{{ spring_boot_url }}"
+    dest: "/tmp/{{ spring_boot_demo_version }}"
+  when: ansible_os_family == "RedHat"
+
+- name: Run the Spring Boot demo
+    shell: nohup java -jar /tmp/{{ spring_boot_demo_version }} </dev/null >/dev/null 2>&1 &

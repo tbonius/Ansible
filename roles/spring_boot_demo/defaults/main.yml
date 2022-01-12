@@ -1,0 +1,8 @@
+---
+# defaults file for the spring boot demo
+
+# Url to install the demo from, will need to be overridden.
+spring_boot_url: repo8/jars/demo-0.1.0-SNAPSHOT.jar
+
+# Demo version number
+spring_boot_demo_version: demo-0.1.0-SNAPSHOT.jar
