@@ -1,12 +1,9 @@
 ---
-- name: Install Java
-  hosts: "{{target}}"
+- hosts: "{{target}}"
+  become: yes
+
   roles:
-    - role: java
+    - java
       vars:
         java_version: 8
-    
-- name: Download and Run Spring Boot
-  hosts: "{{target}}"
-  roles:
-    - role: spring_boot_demo
+    - spring_boot_demo
