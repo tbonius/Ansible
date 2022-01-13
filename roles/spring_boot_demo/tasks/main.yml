@@ -3,13 +3,7 @@
   vars:
     java_version: '8'
 
-- name: Download and Run Spring Boot Demo
+- name: Download and Run Spring Boot
   hosts: "{{target}}"
-  tasks:
-    - name: Download the Spring Boot demo
-      get_url:
-        url: "{{ spring_boot_url }}"
-        dest: "/tmp/{{ spring_boot_demo_version }}"
-
-    - name: Run the Spring Boot demo
-      shell: nohup java -jar "/tmp/{{ spring_boot_demo_version }}" </dev/null >/dev/null 2>&1 &
+  roles:
+    - role: spring_boot_demo
