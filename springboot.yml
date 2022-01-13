@@ -1,11 +1,7 @@
 ---
-- name: Install Java
-  hosts: "{{target}}"
-  roles:
-    - role: java
-      vars:
-        java_version: 8
-        java_type: Oracle
+- import_playbook: java.yml
+  vars:
+    java_version: 8
 
 - name: Install Spring Boot Demo
   hosts: "{{target}}"
