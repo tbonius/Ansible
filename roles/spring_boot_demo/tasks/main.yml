@@ -1,5 +1,6 @@
 ---
-- name: Install Java
+- name: Install Splunk
   hosts: "{{target}}"
   roles:
-    - role: java
+    - role: splunk_forwarder
+    
