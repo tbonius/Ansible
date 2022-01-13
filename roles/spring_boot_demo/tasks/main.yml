@@ -4,6 +4,4 @@
 
   roles:
     - java
-      vars:
-        java_version: 8
     - spring_boot_demo
