@@ -1,7 +1,5 @@
 ---
-- hosts: "{{target}}"
-  become: yes
-
+- name: Install Java
+  hosts: "{{target}}"
   roles:
-    - java
-    - spring_boot_demo
+    - role: java
