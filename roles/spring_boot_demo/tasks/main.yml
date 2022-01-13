@@ -1,7 +1,5 @@
 - name: Install java
   import_playbook: java.yml
-  vars:
-    java_version: '8'
 
 - name: Download and Run Spring Boot
   hosts: "{{target}}"
