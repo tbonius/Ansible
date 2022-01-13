@@ -1,4 +1,5 @@
-- import_playbook: java.yml
+- name: Install java
+  import_playbook: java.yml
   vars:
     java_version: '8'
 
