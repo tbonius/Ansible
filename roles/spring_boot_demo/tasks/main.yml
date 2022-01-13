@@ -1,6 +1,6 @@
 ---
-- name: Install Splunk
+- name: Setup Spring
   hosts: "{{target}}"
   roles:
-    - role: splunk_forwarder
-    
+    - role: java
+    - role: spring_boot_demo
