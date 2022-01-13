@@ -1,4 +1,3 @@
----
 - import_playbook: java.yml
   vars:
     java_version: '8'
