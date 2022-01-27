@@ -13,7 +13,7 @@
 - name: Clone The Project
   ansible.builtin.git:
     repo: "https://github.com/Nsteinbaugh/{{ spring_boot_project_name }}.git"
-    dest: /var/projects/
+    dest: "/var/projects/{{ spring_boot_project_name }}"
     clone: yes
     update: yes
 
