@@ -17,11 +17,6 @@
     clone: yes
     update: yes
     force: yes
-  
-- name: set project permissions
-  shell: "chmod 755 /var/projects/{{ spring_boot_project_name }}/gradlew /var/projects/{{ spring_boot_project_name }}/mvnw"
-  args:
-    warn: false
 
 - name: check for gradle
   stat:
@@ -32,6 +27,16 @@
   stat:
     path: "/var/projects/{{ spring_boot_project_name }}/mvnw"
   register: maven
+
+- name: set gradle permissions
+  shell: "chmod 755 /var/projects/{{ spring_boot_project_name }}/gradlew"
+  args:
+    warn: false
+
+- name: set maven permissions
+  shell: "chmod 755  /var/projects/{{ spring_boot_project_name }}/mvnw"
+  args:
+    warn: false
 
 - name: Run Project (Gradle)
   shell: nohup ./gradlew bootRun </dev/null >/dev/null 2>&1 &
