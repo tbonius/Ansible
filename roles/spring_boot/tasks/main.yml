@@ -18,7 +18,9 @@
     update: yes
   
 - name: set project permissions
-  shell: "chmod 755 /var/projects/{{ spring_boot_project_name }}"
+  shell: "chmod 755 gradlew mvnw"
+  args:
+    chdir: "/var/projects/{{ spring_boot_project_name }}"
   args:
     warn: false
 
@@ -38,8 +40,8 @@
     chdir: "/var/projects/{{ spring_boot_project_name }}"
   when: gradle.stat.exists
 
-- name: Run Project (Gradle)
-  shell: nohup ./gradlew bootRun </dev/null >/dev/null 2>&1 &
+- name: Run Project (Maven)
+  shell: nohup ./mvnw bootRun </dev/null >/dev/null 2>&1 &
   args:
     chdir: "/var/projects/{{ spring_boot_project_name }}"
   when: maven.stat.exists
