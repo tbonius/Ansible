@@ -18,9 +18,7 @@
     update: yes
   
 - name: set project permissions
-  shell: "chmod 755 gradlew mvnw"
-  args:
-    chdir: "/var/projects/{{ spring_boot_project_name }}"
+  shell: "chmod 755 /var/projects/{{ spring_boot_project_name }}/gradlew /var/projects/{{ spring_boot_project_name }}/mvnw"
   args:
     warn: false
 
