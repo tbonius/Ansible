@@ -1,7 +1,8 @@
 ---
 - import_playbook: java.yml
   vars:
-    java_version: 8
+    java_version: 11
+    java_type: Open
 
 - name: Install Spring Boot Project
   hosts: "{{target}}"
