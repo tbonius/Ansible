@@ -16,6 +16,11 @@
     dest: "/var/projects/{{ spring_boot_project_name }}"
     clone: yes
     update: yes
+  
+- name: set project permissions
+  shell: "chmod 755 /var/projects/{{ spring_boot_project_name }}"
+  args:
+    warn: false
 
 - name: check for gradle
   stat:
