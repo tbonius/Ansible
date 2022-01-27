@@ -32,11 +32,13 @@
   shell: "chmod 755 /var/projects/{{ spring_boot_project_name }}/gradlew"
   args:
     warn: false
+  when: gradle.stat.exists
 
 - name: set maven permissions
   shell: "chmod 755  /var/projects/{{ spring_boot_project_name }}/mvnw"
   args:
     warn: false
+  when: maven.stat.exists
 
 - name: Run Project (Gradle)
   shell: nohup ./gradlew bootRun </dev/null >/dev/null 2>&1 &
