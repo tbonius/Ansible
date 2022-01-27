@@ -4,6 +4,7 @@
     java_version: 8
 
 - name: Install Git
+  hosts: "{{target}}"
   yum:
     name: git
     state: latest
