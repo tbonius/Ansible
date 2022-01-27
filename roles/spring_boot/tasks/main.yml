@@ -1,0 +1,35 @@
+---
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: /var/projects
+    state: directory
+    mode: '0755'
+
+- name: Clone The Project
+  ansible.builtin.git:
+    repo: "https://github.com/Nsteinbaugh/{{ spring_boot_project_name }}.git"
+    dest: /var/projects/
+    clone: yes
+    update: yes
+
+- name: check for gradle
+  stat:
+    path: "/var/projects/{{ spring_boot_project_name }}/gradlew"
+  register: gradle
+
+- name: check for maven
+  stat:
+    path: "/var/projects/{{ spring_boot_project_name }}/mvnw"
+  register: maven
+
+- name: Run Project (Gradle)
+  shell: nohup ./gradlew bootRun </dev/null >/dev/null 2>&1 &
+  args:
+    chdir: "/var/projects/{{ spring_boot_project_name }}"
+  when: gradle.stat.exists
+
+- name: Run Project (Gradle)
+  shell: nohup ./gradlew bootRun </dev/null >/dev/null 2>&1 &
+  args:
+    chdir: "/var/projects/{{ spring_boot_project_name }}"
+  when: maven.stat.exists

@@ -3,7 +3,7 @@
   vars:
     java_version: 8
 
-- name: Install Spring Boot Demo
+- name: Install Spring Boot Project
   hosts: "{{target}}"
   roles:
-    - role: spring_boot_demo
+    - role: spring_boot

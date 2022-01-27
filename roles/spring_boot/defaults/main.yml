@@ -1,0 +1,5 @@
+---
+# defaults file for the spring boot demo
+
+# Url to install the demo from, will need to be overridden.
+spring_boot_project_name: InsiderTrading
