@@ -1,4 +1,9 @@
 ---
+- name: Install Git
+  yum:
+    name: git
+    state: latest
+
 - name: Create a directory if it does not exist
   ansible.builtin.file:
     path: /var/projects

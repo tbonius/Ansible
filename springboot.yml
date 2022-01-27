@@ -3,12 +3,6 @@
   vars:
     java_version: 8
 
-- name: Install Git
-  hosts: "{{target}}"
-  yum:
-    name: git
-    state: latest
-
 - name: Install Spring Boot Project
   hosts: "{{target}}"
   roles:
