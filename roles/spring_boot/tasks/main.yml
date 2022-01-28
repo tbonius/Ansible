@@ -41,13 +41,9 @@
   when: maven.stat.exists
 
 - name: Run Project (Gradle)
-  shell: nohup ./gradlew bootRun </dev/null >/dev/null 2>&1 &
-  args:
-    chdir: "/var/projects/{{ spring_boot_project_name }}"
+  shell: "nohup /var/projects/{{ spring_boot_project_name }}/gradlew bootRun </dev/null >/dev/null 2>&1 &"
   when: gradle.stat.exists
 
 - name: Run Project (Maven)
-  shell: nohup ./mvnw bootRun </dev/null >/dev/null 2>&1 &
-  args:
-    chdir: "/var/projects/{{ spring_boot_project_name }}"
+  shell: "nohup /var/projects/{{ spring_boot_project_name }}/mvnw bootRun </dev/null >/dev/null 2>&1 &"
   when: maven.stat.exists
