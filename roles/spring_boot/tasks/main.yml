@@ -41,7 +41,7 @@
   when: maven.stat.exists
 
 - name: Run Project (Gradle)
-  shell: "nohup /var/projects/{{ spring_boot_project_name }}/gradlew bootRun </dev/null >/dev/null 2>&1 &"
+  shell: "cd /var/projects/{{ spring_boot_project_name }}; ./gradlew bootRun"
   when: gradle.stat.exists
   become: yes
 
