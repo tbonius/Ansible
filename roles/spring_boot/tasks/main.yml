@@ -40,12 +40,15 @@
     warn: false
   when: maven.stat.exists
 
+- name: cd into project folder
+  shell: "cd /var/projects/{{ spring_boot_project_name }}"
+
 - name: Run Project (Gradle)
-  shell: "cd /var/projects/{{ spring_boot_project_name }}; ./gradlew bootRun"
+  shell: "nohup ./gradlew bootRun </dev/null >/dev/null 2>&1 &"
   when: gradle.stat.exists
   become: yes
 
 - name: Run Project (Maven)
-  shell: "cd /var/projects/{{ spring_boot_project_name }}; ./mvnw spring-boot:run"
+  shell: "nohup ./mvnw spring-boot:run </dev/null >/dev/null 2>&1 &"
   when: maven.stat.exists
   become: yes
