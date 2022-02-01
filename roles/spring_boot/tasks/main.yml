@@ -46,6 +46,6 @@
   become: yes
 
 - name: Run Project (Maven)
-  shell: "nohup /var/projects/{{ spring_boot_project_name }}/mvnw bootRun </dev/null >/dev/null 2>&1 &"
+  shell: "cd /var/projects/{{ spring_boot_project_name }}; ./mvnw spring-boot:run"
   when: maven.stat.exists
   become: yes
