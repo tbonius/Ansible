@@ -1,0 +1,3 @@
+---
+- name: Proving that you can add a file
+  shell: "echo yay"
